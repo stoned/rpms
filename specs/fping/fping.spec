@@ -5,7 +5,7 @@
 Summary: Utility to ping multiple hosts at once
 Name: fping
 Version: 3.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: distributable
 Group: Applications/Internet
 URL: http://www.fping.org/
@@ -44,20 +44,12 @@ will be considered unreachable.
 #{__automake} --add-missing
 
 %build
-%configure --program-prefix="%{?_program_prefix}"
-%{__make} %{?_smp_mflags}
-%{__mv} -f src/fping src/fping6
-
-%configure \
-    --program-prefix="%{?_program_prefix}" \
-    --disable-ipv6
+%configure --program-prefix="%{?_program_prefix}" --enable-ipv6
 %{__make} %{?_smp_mflags}
 
 %install
 %{__rm} -rf %{buildroot}
 %{__make} install DESTDIR="%{buildroot}"
-%{__install} -Dp -m4755 src/fping6 %{buildroot}%{_sbindir}/fping6
-%{__ln_s} -f fping.8 %{buildroot}%{_mandir}/man8/fping6.8
 
 %clean
 %{__rm} -rf %{buildroot}
@@ -73,6 +65,9 @@ will be considered unreachable.
 %{_sbindir}/fping6
 
 %changelog
+* Sun May  4 2014 Stoned Elipot <stoned.elipot@gmail.com> - 3.4-2
+- Fix build for IPv6.
+
 * Sun Sep 23 2012 Dag Wieers <dag@wieers.com> - 3.4-1
 - Updated to release 3.4.
 
